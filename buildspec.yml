@@ -1,0 +1,17 @@
+version: 0.2
+
+phases:
+  install:
+    commands:
+      - yarn install
+  build:
+    commands:
+      - yarn build
+  post_build:
+    commands:
+      - aws cloudformation package --template template.yml --s3-bucket implementacion-artifacts-yennyferg --output-template package.yml
+
+artifacts:
+  files:
+    - package.yml
+  discard-paths: yes
