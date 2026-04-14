@@ -94,7 +94,7 @@ Resources:
                 Action:
                   - dynamodb:GetItem
                   - dynamodb:PutItem
-                Resource: !GetAtt ContactDynamoDB.Arn  
+                Resource: !GetAtt ContactDynamoDB.Arn
 
   ContactCreateLogGroup:
     Type: AWS::Logs::LogGroup
@@ -150,13 +150,13 @@ Resources:
                 Action:
                   - dynamodb:GetItem
                   - dynamodb:DeleteItem
-                Resource: !GetAtt ContactDynamoDB.Arn  
+                Resource: !GetAtt ContactDynamoDB.Arn
 
   ContactDeleteLogGroup:
     Type: AWS::Logs::LogGroup
     Properties:
       LogGroupName: !Sub "/aws/lambda/${ContactDeleteLambda}"
-      RetentionInDays: 7      
+      RetentionInDays: 7
 
   ContactGetLambda:
     Type: AWS::Serverless::Function
@@ -205,13 +205,13 @@ Resources:
               - Effect: Allow
                 Action:
                   - dynamodb:GetItem
-                Resource: !GetAtt ContactDynamoDB.Arn  
+                Resource: !GetAtt ContactDynamoDB.Arn
 
   ContactGetLogGroup:
     Type: AWS::Logs::LogGroup
     Properties:
       LogGroupName: !Sub "/aws/lambda/${ContactGetLambda}"
-      RetentionInDays: 7      
+      RetentionInDays: 7
 
   ContactUpdateLambda:
     Type: AWS::Serverless::Function
@@ -261,5 +261,11 @@ Resources:
                 Action:
                   - dynamodb:GetItem
                   - dynamodb:UpdateItem
-                Resource
+                Resource: !GetAtt ContactDynamoDB.Arn
+
+  ContactUpdateLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub "/aws/lambda/${ContactUpdateLambda}"
+      RetentionInDays: 7
 
