@@ -99,9 +99,7 @@ Resources:
   ContactCreateLogGroup:
     Type: AWS::Logs::LogGroup
     Properties:
-      LogGroupName: !Sub
-        - /aws/lambda/${MyLambdaFunction}
-        - MyLambdaFunction: !Ref ContactCreateLambda
+      LogGroupName: !Sub "/aws/lambda/${ContactCreateLambda}"
       RetentionInDays: 7
 
   ContactDeleteLambda:
@@ -157,9 +155,7 @@ Resources:
   ContactDeleteLogGroup:
     Type: AWS::Logs::LogGroup
     Properties:
-      LogGroupName: !Sub
-        - /aws/lambda/${MyLambdaFunction}
-        - MyLambdaFunction: !Ref ContactDeleteLambda
+      LogGroupName: !Sub "/aws/lambda/${ContactDeleteLambda}"
       RetentionInDays: 7      
 
   ContactGetLambda:
@@ -214,9 +210,7 @@ Resources:
   ContactGetLogGroup:
     Type: AWS::Logs::LogGroup
     Properties:
-      LogGroupName: !Sub
-        - /aws/lambda/${MyLambdaFunction}
-        - MyLambdaFunction: !Ref ContactGetLambda
+      LogGroupName: !Sub "/aws/lambda/${ContactGetLambda}"
       RetentionInDays: 7      
 
   ContactUpdateLambda:
@@ -267,7 +261,5 @@ Resources:
                 Action:
                   - dynamodb:GetItem
                   - dynamodb:UpdateItem
-                Resource: !GetAtt ContactDynamoDB.
-
-
+                Resource
 
