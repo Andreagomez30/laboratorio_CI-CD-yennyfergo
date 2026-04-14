@@ -21,7 +21,7 @@ Resources:
     DeletionPolicy: Retain
     UpdateReplacePolicy: Retain
     Properties:
-      TableName: contact_v2
+      TableName: yenny-contact
       AttributeDefinitions:
         - AttributeName: "email"
           AttributeType: "S"
@@ -38,7 +38,7 @@ Resources:
   ContactApi:
     Type: AWS::Serverless::Api
     Properties:
-      Name: contact-api
+      Name: yenny-contact-api
       EndpointConfiguration: REGIONAL
       StageName: prod
       Cors:
@@ -49,7 +49,7 @@ Resources:
   ContactCreateLambda:
     Type: AWS::Serverless::Function
     Properties:
-      FunctionName: contact-create
+      FunctionName: yenny-contact-create
       CodeUri: ./
       Role: !GetAtt ContactCreateRole.Arn
       Environment:
@@ -69,7 +69,7 @@ Resources:
     Type: AWS::IAM::Role
     Properties:
       RoleName: !Sub
-        - 'ContactCreateRole${region}v2'
+        - 'YennyContactCreateRole${region}'
         - region: !FindInMap [RegionMap, !Ref 'AWS::Region', RegionShortName]
       AssumeRolePolicyDocument:
         Version: 2012-10-17
@@ -105,7 +105,7 @@ Resources:
   ContactDeleteLambda:
     Type: AWS::Serverless::Function
     Properties:
-      FunctionName: contact-delete
+      FunctionName: yenny-contact-delete
       CodeUri: ./
       Role: !GetAtt ContactDeleteRole.Arn
       Environment:
@@ -125,7 +125,7 @@ Resources:
     Type: AWS::IAM::Role
     Properties:
       RoleName: !Sub
-        - 'ContactDeleteRole${region}v2'
+        - 'YennyContactDeleteRole${region}'
         - region: !FindInMap [RegionMap, !Ref 'AWS::Region', RegionShortName]
       AssumeRolePolicyDocument:
         Version: 2012-10-17
@@ -161,7 +161,7 @@ Resources:
   ContactGetLambda:
     Type: AWS::Serverless::Function
     Properties:
-      FunctionName: contact-get
+      FunctionName: yenny-contact-get
       CodeUri: ./
       Role: !GetAtt ContactGetRole.Arn
       Environment:
@@ -181,7 +181,7 @@ Resources:
     Type: AWS::IAM::Role
     Properties:
       RoleName: !Sub
-        - 'ContactGetRole${region}v2'
+        - 'YennyContactGetRole${region}'
         - region: !FindInMap [RegionMap, !Ref 'AWS::Region', RegionShortName]
       AssumeRolePolicyDocument:
         Version: 2012-10-17
@@ -216,7 +216,7 @@ Resources:
   ContactUpdateLambda:
     Type: AWS::Serverless::Function
     Properties:
-      FunctionName: contact-update
+      FunctionName: yenny-contact-update
       CodeUri: ./
       Role: !GetAtt ContactUpdateRole.Arn
       Environment:
@@ -236,7 +236,7 @@ Resources:
     Type: AWS::IAM::Role
     Properties:
       RoleName: !Sub
-        - 'ContactUpdateRole${region}v2'
+        - 'YennyContactUpdateRole${region}'
         - region: !FindInMap [RegionMap, !Ref 'AWS::Region', RegionShortName]
       AssumeRolePolicyDocument:
         Version: 2012-10-17
