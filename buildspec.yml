@@ -6,7 +6,7 @@ phases:
       - yarn install
   build:
     commands:
-      - yarn build
+      - echo "Saltando build porque los archivos ya están listos..."
   post_build:
     commands:
       - aws cloudformation package --template template.yml --s3-bucket implementacion-artifacts-yennyferg --output-template package.yml
