@@ -50,7 +50,7 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       FunctionName: contact-create
-      CodeUri: build/create
+      CodeUri: ./
       Role: !GetAtt ContactCreateRole.Arn
       Environment:
         Variables:
@@ -71,7 +71,6 @@ Resources:
       RoleName: !Sub
         - 'ContactCreateRole${region}'
         - region: !FindInMap [RegionMap, !Ref 'AWS::Region', RegionShortName]
-      Description: Create contact role
       AssumeRolePolicyDocument:
         Version: 2012-10-17
         Statement:
@@ -99,20 +98,17 @@ Resources:
 
   ContactCreateLogGroup:
     Type: AWS::Logs::LogGroup
-    DeletionPolicy: Retain
-    UpdateReplacePolicy: Retain
     Properties:
       LogGroupName: !Sub
         - /aws/lambda/${MyLambdaFunction}
         - MyLambdaFunction: !Ref ContactCreateLambda
       RetentionInDays: 7
 
-
   ContactDeleteLambda:
     Type: AWS::Serverless::Function
     Properties:
       FunctionName: contact-delete
-      CodeUri: build/delete
+      CodeUri: ./
       Role: !GetAtt ContactDeleteRole.Arn
       Environment:
         Variables:
@@ -133,7 +129,6 @@ Resources:
       RoleName: !Sub
         - 'ContactDeleteRole${region}'
         - region: !FindInMap [RegionMap, !Ref 'AWS::Region', RegionShortName]
-      Description: Delete contact role
       AssumeRolePolicyDocument:
         Version: 2012-10-17
         Statement:
@@ -161,8 +156,6 @@ Resources:
 
   ContactDeleteLogGroup:
     Type: AWS::Logs::LogGroup
-    DeletionPolicy: Retain
-    UpdateReplacePolicy: Retain
     Properties:
       LogGroupName: !Sub
         - /aws/lambda/${MyLambdaFunction}
@@ -173,7 +166,7 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       FunctionName: contact-get
-      CodeUri: build/get
+      CodeUri: ./
       Role: !GetAtt ContactGetRole.Arn
       Environment:
         Variables:
@@ -194,7 +187,6 @@ Resources:
       RoleName: !Sub
         - 'ContactGetRole${region}'
         - region: !FindInMap [RegionMap, !Ref 'AWS::Region', RegionShortName]
-      Description: Get contact role
       AssumeRolePolicyDocument:
         Version: 2012-10-17
         Statement:
@@ -221,8 +213,6 @@ Resources:
 
   ContactGetLogGroup:
     Type: AWS::Logs::LogGroup
-    DeletionPolicy: Retain
-    UpdateReplacePolicy: Retain
     Properties:
       LogGroupName: !Sub
         - /aws/lambda/${MyLambdaFunction}
@@ -233,7 +223,7 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       FunctionName: contact-update
-      CodeUri: build/update
+      CodeUri: ./
       Role: !GetAtt ContactUpdateRole.Arn
       Environment:
         Variables:
@@ -254,7 +244,6 @@ Resources:
       RoleName: !Sub
         - 'ContactUpdateRole${region}'
         - region: !FindInMap [RegionMap, !Ref 'AWS::Region', RegionShortName]
-      Description: Update contact role
       AssumeRolePolicyDocument:
         Version: 2012-10-17
         Statement:
@@ -278,18 +267,7 @@ Resources:
                 Action:
                   - dynamodb:GetItem
                   - dynamodb:UpdateItem
-                Resource: !GetAtt ContactDynamoDB.Arn  
-
-  ContactUpdateLogGroup:
-    Type: AWS::Logs::LogGroup
-    DeletionPolicy: Retain
-    UpdateReplacePolicy: Retain
-    Properties:
-      LogGroupName: !Sub
-        - /aws/lambda/${MyLambdaFunction}
-        - MyLambdaFunction: !Ref ContactUpdateLambda
-      RetentionInDays: 7      
-
+                Resource: !GetAtt ContactDynamoDB.
 
 
 
