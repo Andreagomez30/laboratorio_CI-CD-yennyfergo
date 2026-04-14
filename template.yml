@@ -21,7 +21,7 @@ Resources:
     DeletionPolicy: Retain
     UpdateReplacePolicy: Retain
     Properties:
-      TableName: contact
+      TableName: contact_v2
       AttributeDefinitions:
         - AttributeName: "email"
           AttributeType: "S"
@@ -69,7 +69,7 @@ Resources:
     Type: AWS::IAM::Role
     Properties:
       RoleName: !Sub
-        - 'ContactCreateRole${region}'
+        - 'ContactCreateRole${region}v2'
         - region: !FindInMap [RegionMap, !Ref 'AWS::Region', RegionShortName]
       AssumeRolePolicyDocument:
         Version: 2012-10-17
@@ -125,7 +125,7 @@ Resources:
     Type: AWS::IAM::Role
     Properties:
       RoleName: !Sub
-        - 'ContactDeleteRole${region}'
+        - 'ContactDeleteRole${region}v2'
         - region: !FindInMap [RegionMap, !Ref 'AWS::Region', RegionShortName]
       AssumeRolePolicyDocument:
         Version: 2012-10-17
@@ -181,7 +181,7 @@ Resources:
     Type: AWS::IAM::Role
     Properties:
       RoleName: !Sub
-        - 'ContactGetRole${region}'
+        - 'ContactGetRole${region}v2'
         - region: !FindInMap [RegionMap, !Ref 'AWS::Region', RegionShortName]
       AssumeRolePolicyDocument:
         Version: 2012-10-17
@@ -236,7 +236,7 @@ Resources:
     Type: AWS::IAM::Role
     Properties:
       RoleName: !Sub
-        - 'ContactUpdateRole${region}'
+        - 'ContactUpdateRole${region}v2'
         - region: !FindInMap [RegionMap, !Ref 'AWS::Region', RegionShortName]
       AssumeRolePolicyDocument:
         Version: 2012-10-17
