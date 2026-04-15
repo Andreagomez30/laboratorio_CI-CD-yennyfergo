@@ -1,6 +1,6 @@
-// Usamos la nueva versión de AWS SDK compatible con Node 20
+// 1. Añadimos ScanCommand y GetCommand a las importaciones
 const { DynamoDBClient } = require("@aws-sdk/client-dynamodb");
-const { DynamoDBDocumentClient, PutCommand } = require("@aws-sdk/lib-dynamodb");
+const { DynamoDBDocumentClient, PutCommand, ScanCommand, GetCommand } = require("@aws-sdk/lib-dynamodb");
 
 const client = new DynamoDBClient({});
 const dynamo = DynamoDBDocumentClient.from(client);
@@ -17,11 +17,26 @@ exports.handler = async (event) => {
 
     try {
         const tableName = process.env.TABLE_NAME_CONTACTS;
-        const requestBody = JSON.parse(event.body);
 
         switch (event.httpMethod) {
+            // --- NUEVA LÓGICA PARA GET ---
+            case "GET":
+                if (event.pathParameters && event.pathParameters.email) {
+                    // Si envías un email en la ruta (ej: /email@test.com), busca ese contacto
+                    const result = await dynamo.send(new GetCommand({
+                        TableName: tableName,
+                        Key: { email: event.pathParameters.email }
+                    }));
+                    body = result.Item || { message: "Contacto no encontrado" };
+                } else {
+                    // Si no hay email, escanea la tabla y trae todo
+                    const result = await dynamo.send(new ScanCommand({ TableName: tableName }));
+                    body = result.Items;
+                }
+                break;
+
             case "POST":
-                // La forma de guardar cambia ligeramente en la versión 3
+                const requestBody = JSON.parse(event.body);
                 await dynamo.send(new PutCommand({
                     TableName: tableName,
                     Item: {
@@ -32,6 +47,7 @@ exports.handler = async (event) => {
                 }));
                 body = { message: "Contact created successfully", item: requestBody };
                 break;
+
             default:
                 throw new Error(`Método no soportado: "${event.httpMethod}"`);
         }
