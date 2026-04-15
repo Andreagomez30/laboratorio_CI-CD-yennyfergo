@@ -1,5 +1,9 @@
-const AWS = require('aws-sdk');
-const dynamo = new AWS.DynamoDB.DocumentClient();
+// Usamos la nueva versión de AWS SDK compatible con Node 20
+const { DynamoDBClient } = require("@aws-sdk/client-dynamodb");
+const { DynamoDBDocumentClient, PutCommand } = require("@aws-sdk/lib-dynamodb");
+
+const client = new DynamoDBClient({});
+const dynamo = DynamoDBDocumentClient.from(client);
 
 exports.handler = async (event) => {
     let body;
@@ -12,44 +16,31 @@ exports.handler = async (event) => {
     };
 
     try {
-        // Esta variable la toma automáticamente de tu template.yml
         const tableName = process.env.TABLE_NAME_CONTACTS;
-        
-        // Convertimos el cuerpo de la petición de Postman a un objeto JS
         const requestBody = JSON.parse(event.body);
 
         switch (event.httpMethod) {
             case "POST":
-                // Estructura para guardar en DynamoDB
-                await dynamo.put({
+                // La forma de guardar cambia ligeramente en la versión 3
+                await dynamo.send(new PutCommand({
                     TableName: tableName,
                     Item: {
-                        email: requestBody.email,       // Llave primaria
+                        email: requestBody.email,
                         name: requestBody.name,
                         phoneNumber: requestBody.phoneNumber
                     }
-                }).promise();
-                body = { 
-                    message: "Contact created successfully",
-                    item: requestBody 
-                };
+                }));
+                body = { message: "Contact created successfully", item: requestBody };
                 break;
             default:
                 throw new Error(`Método no soportado: "${event.httpMethod}"`);
         }
     } catch (err) {
         statusCode = 400;
-        body = {
-            error: err.message,
-            log: "Asegúrate de enviar un JSON válido en Postman"
-        };
+        body = { error: err.message };
     } finally {
         body = JSON.stringify(body);
     }
 
-    return {
-        statusCode,
-        body,
-        headers
-    };
+    return { statusCode, body, headers };
 };
