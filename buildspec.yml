@@ -6,13 +6,12 @@ phases:
       nodejs: 20
   build:
     commands:
-      - echo Build started on `date`
-      - # Aquí puedes agregar comandos si necesitas instalar dependencias ligeras
-      - export BUCKET=implementacion-artifacts-yennyferg
-      - aws cloudformation package --template-file template.yml --s3-bucket $BUCKET --output-template-file outputtemplate.yml
+      - echo "Empaquetando el proyecto..."
+      # Usamos package.yml como nombre de salida para que coincida con tu Pipeline
+      - aws cloudformation package --template-file template.yml --s3-bucket implementacion-artifacts-yennyferg --output-template-file package.yml
 
 artifacts:
   files:
-    - outputtemplate.yml
+    - package.yml
     - index.js
     - package.json
