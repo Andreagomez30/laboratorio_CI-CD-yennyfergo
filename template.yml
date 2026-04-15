@@ -21,7 +21,7 @@ Resources:
     DeletionPolicy: Retain
     UpdateReplacePolicy: Retain
     Properties:
-      TableName: yenny-contact
+      TableName: yenny-contact-v3
       AttributeDefinitions:
         - AttributeName: "email"
           AttributeType: "S"
@@ -55,8 +55,6 @@ Resources:
       Environment:
         Variables:
           TABLE_NAME_CONTACTS: !Ref ContactDynamoDB
-      Tags:
-        SYSTEM: 'work-shop'
       Events:
         CreateRequest:
           Type: Api
@@ -68,39 +66,24 @@ Resources:
   ContactCreateRole:
     Type: AWS::IAM::Role
     Properties:
-      RoleName: !Sub
-        - 'YennyContactCreateRole${region}'
-        - region: !FindInMap [RegionMap, !Ref 'AWS::Region', RegionShortName]
+      RoleName: !Sub 'YennyContactCreateRole-${AWS::Region}-v3'
       AssumeRolePolicyDocument:
         Version: 2012-10-17
         Statement:
           - Effect: Allow
             Principal:
-              Service:
-                - lambda.amazonaws.com
-            Action:
-              - sts:AssumeRole
+              Service: [lambda.amazonaws.com]
+            Action: ['sts:AssumeRole']
       ManagedPolicyArns:
         - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
-        - arn:aws:iam::aws:policy/AWSXrayWriteOnlyAccess
-        - arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole
-        - arn:aws:iam::aws:policy/CloudWatchLambdaInsightsExecutionRolePolicy
       Policies:
         - PolicyName: DynamoDBPolicy
           PolicyDocument:
             Version: 2012-10-17
             Statement:
               - Effect: Allow
-                Action:
-                  - dynamodb:GetItem
-                  - dynamodb:PutItem
+                Action: ['dynamodb:GetItem', 'dynamodb:PutItem']
                 Resource: !GetAtt ContactDynamoDB.Arn
-
-  ContactCreateLogGroup:
-    Type: AWS::Logs::LogGroup
-    Properties:
-      LogGroupName: !Sub "/aws/lambda/${ContactCreateLambda}"
-      RetentionInDays: 7
 
   ContactDeleteLambda:
     Type: AWS::Serverless::Function
@@ -111,8 +94,6 @@ Resources:
       Environment:
         Variables:
           TABLE_NAME_CONTACTS: !Ref ContactDynamoDB
-      Tags:
-        SYSTEM: 'work-shop'
       Events:
         DeleteRequest:
           Type: Api
@@ -124,39 +105,24 @@ Resources:
   ContactDeleteRole:
     Type: AWS::IAM::Role
     Properties:
-      RoleName: !Sub
-        - 'YennyContactDeleteRole${region}'
-        - region: !FindInMap [RegionMap, !Ref 'AWS::Region', RegionShortName]
+      RoleName: !Sub 'YennyContactDeleteRole-${AWS::Region}-v3'
       AssumeRolePolicyDocument:
         Version: 2012-10-17
         Statement:
           - Effect: Allow
             Principal:
-              Service:
-                - lambda.amazonaws.com
-            Action:
-              - sts:AssumeRole
+              Service: [lambda.amazonaws.com]
+            Action: ['sts:AssumeRole']
       ManagedPolicyArns:
         - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
-        - arn:aws:iam::aws:policy/AWSXrayWriteOnlyAccess
-        - arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole
-        - arn:aws:iam::aws:policy/CloudWatchLambdaInsightsExecutionRolePolicy
       Policies:
         - PolicyName: DynamoDBPolicy
           PolicyDocument:
             Version: 2012-10-17
             Statement:
               - Effect: Allow
-                Action:
-                  - dynamodb:GetItem
-                  - dynamodb:DeleteItem
+                Action: ['dynamodb:GetItem', 'dynamodb:DeleteItem']
                 Resource: !GetAtt ContactDynamoDB.Arn
-
-  ContactDeleteLogGroup:
-    Type: AWS::Logs::LogGroup
-    Properties:
-      LogGroupName: !Sub "/aws/lambda/${ContactDeleteLambda}"
-      RetentionInDays: 7
 
   ContactGetLambda:
     Type: AWS::Serverless::Function
@@ -167,8 +133,6 @@ Resources:
       Environment:
         Variables:
           TABLE_NAME_CONTACTS: !Ref ContactDynamoDB
-      Tags:
-        SYSTEM: 'work-shop'
       Events:
         GetRequest:
           Type: Api
@@ -180,38 +144,24 @@ Resources:
   ContactGetRole:
     Type: AWS::IAM::Role
     Properties:
-      RoleName: !Sub
-        - 'YennyContactGetRole${region}'
-        - region: !FindInMap [RegionMap, !Ref 'AWS::Region', RegionShortName]
+      RoleName: !Sub 'YennyContactGetRole-${AWS::Region}-v3'
       AssumeRolePolicyDocument:
         Version: 2012-10-17
         Statement:
           - Effect: Allow
             Principal:
-              Service:
-                - lambda.amazonaws.com
-            Action:
-              - sts:AssumeRole
+              Service: [lambda.amazonaws.com]
+            Action: ['sts:AssumeRole']
       ManagedPolicyArns:
         - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
-        - arn:aws:iam::aws:policy/AWSXrayWriteOnlyAccess
-        - arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole
-        - arn:aws:iam::aws:policy/CloudWatchLambdaInsightsExecutionRolePolicy
       Policies:
         - PolicyName: DynamoDBPolicy
           PolicyDocument:
             Version: 2012-10-17
             Statement:
               - Effect: Allow
-                Action:
-                  - dynamodb:GetItem
+                Action: ['dynamodb:GetItem']
                 Resource: !GetAtt ContactDynamoDB.Arn
-
-  ContactGetLogGroup:
-    Type: AWS::Logs::LogGroup
-    Properties:
-      LogGroupName: !Sub "/aws/lambda/${ContactGetLambda}"
-      RetentionInDays: 7
 
   ContactUpdateLambda:
     Type: AWS::Serverless::Function
@@ -222,8 +172,6 @@ Resources:
       Environment:
         Variables:
           TABLE_NAME_CONTACTS: !Ref ContactDynamoDB
-      Tags:
-        SYSTEM: 'work-shop'
       Events:
         PutRequest:
           Type: Api
@@ -235,37 +183,22 @@ Resources:
   ContactUpdateRole:
     Type: AWS::IAM::Role
     Properties:
-      RoleName: !Sub
-        - 'YennyContactUpdateRole${region}'
-        - region: !FindInMap [RegionMap, !Ref 'AWS::Region', RegionShortName]
+      RoleName: !Sub 'YennyContactUpdateRole-${AWS::Region}-v3'
       AssumeRolePolicyDocument:
         Version: 2012-10-17
         Statement:
           - Effect: Allow
             Principal:
-              Service:
-                - lambda.amazonaws.com
-            Action:
-              - sts:AssumeRole
+              Service: [lambda.amazonaws.com]
+            Action: ['sts:AssumeRole']
       ManagedPolicyArns:
         - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
-        - arn:aws:iam::aws:policy/AWSXrayWriteOnlyAccess
-        - arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole
-        - arn:aws:iam::aws:policy/CloudWatchLambdaInsightsExecutionRolePolicy
       Policies:
         - PolicyName: DynamoDBPolicy
           PolicyDocument:
             Version: 2012-10-17
             Statement:
               - Effect: Allow
-                Action:
-                  - dynamodb:GetItem
-                  - dynamodb:UpdateItem
+                Action: ['dynamodb:GetItem', 'dynamodb:UpdateItem']
                 Resource: !GetAtt ContactDynamoDB.Arn
-
-  ContactUpdateLogGroup:
-    Type: AWS::Logs::LogGroup
-    Properties:
-      LogGroupName: !Sub "/aws/lambda/${ContactUpdateLambda}"
-      RetentionInDays: 7
 
