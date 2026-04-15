@@ -2,16 +2,17 @@ version: 0.2
 
 phases:
   install:
-    commands:
-      - yarn install
+    runtime-versions:
+      nodejs: 20
   build:
     commands:
-      - echo "Empaquetando desde la raíz..."
-  post_build:
-    commands:
-      - aws cloudformation package --template template.yml --s3-bucket implementacion-artifacts-yennyferg --output-template package.yml
+      - echo Build started on `date`
+      - # Aquí puedes agregar comandos si necesitas instalar dependencias ligeras
+      - export BUCKET=implementacion-artifacts-yennyferg
+      - aws cloudformation package --template-file template.yml --s3-bucket $BUCKET --output-template-file outputtemplate.yml
 
 artifacts:
   files:
-    - package.yml
-  discard-paths: yes
+    - outputtemplate.yml
+    - index.js
+    - package.json
